@@ -1,17 +1,12 @@
 const axios = require('axios')
 
-const parseQuery = s => {
-	const o = s
-		.split('&')
-		.map(x => x.split('='))
-		.reduce((p, c) => {
-			if (!(c[0] in p)) p[c[0]] = []
-			p[c[0]].push(decodeURIComponent(c[1]))
-			return p
-		}, {})
-	Object.keys(o).forEach(k => (o[k] = o[k].length === 1 ? o[k][0] : o[k]))
-	return o
-}
+const parseQuery = s =>
+	Object.assign(
+		...s
+			.split('&')
+			.map(x => x.split('='))
+			.map(p => ({ [p[0]]: decodeURIComponent(p[1]) }))
+	)
 const decsig = a => {
 	// 2018/4/19
 	var qz = {

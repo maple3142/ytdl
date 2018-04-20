@@ -50,7 +50,7 @@ const getVideo = id =>
 			}
 			let adaptive = null
 			if (obj.adaptive_fmts) {
-				obj.adaptive_fmts.split(',').map(parseQuery)
+				adaptive = obj.adaptive_fmts.split(',').map(parseQuery)
 				if (adaptive[0].sp && adaptive[0].sp.includes('signature')) {
 					adaptive = adaptive
 						.map(x => ({ ...x, s: decsig(x.s) }))

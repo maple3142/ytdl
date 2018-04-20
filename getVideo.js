@@ -34,23 +34,28 @@ const decsig = a => {
 	return a.join('')
 }
 
-const getVideo = id => {
-	return axios
+const getVideo = id =>
+	axios
 		.get(`http://www.youtube.com/get_video_info?video_id=${id}&el=embedded&ps=default&eurl=&gl=US&hl=en`)
 		.then(({ data }) => {
 			const obj = parseQuery(data)
 			if (obj.status === 'fail') {
 				throw obj
 			}
-			let mp = obj.url_encoded_fmt_stream_map.split(',').map(parseQuery)
-			if (mp[0].sp && mp[0].sp.includes('signature')) {
-				mp = mp
+			let stream = obj.url_encoded_fmt_stream_map.split(',').map(parseQuery)
+			if (stream[0].sp && stream[0].sp.includes('signature')) {
+				stream = stream
 					.map(x => ({ ...x, s: decsig(x.s) }))
 					.map(x => ({ ...x, url: x.url + `&signature=${x.s}&alr=yes` }))
 			}
-			return mp
+			let adaptive = obj.adaptive_fmts.split(',').map(parseQuery)
+			if (adaptive[0].sp && adaptive[0].sp.includes('signature')) {
+				adaptive = adaptive
+					.map(x => ({ ...x, s: decsig(x.s) }))
+					.map(x => ({ ...x, url: x.url + `&signature=${x.s}&alr=yes` }))
+			}
+			return { stream, adaptive }
 		})
-}
 module.exports = getVideo
 
 if (require.main === module) {

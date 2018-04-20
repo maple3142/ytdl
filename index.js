@@ -21,6 +21,14 @@ app.use(async (ctx, next) => {
 	console.log(`${ctx.method} ${ctx.url} - ${ms}ms`)
 })
 
+app.use(async (ctx, next) => {
+	await next()
+	const { format } = ctx.request.query
+	if (format) {
+		ctx.body = JSON.stringify(ctx.body, null, 2)
+	}
+})
+
 app.use(async ctx => {
 	const { id } = ctx.request.query
 	if (!id) {

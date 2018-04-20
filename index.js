@@ -3,6 +3,11 @@ const app = new Koa()
 const getVideo = require('./getVideo')
 
 app.use(async (ctx, next) => {
+	await next()
+	ctx.set('Access-Control-Allow-Origin', '*')
+})
+
+app.use(async (ctx, next) => {
 	const start = Date.now()
 	await next()
 	const ms = Date.now() - start
@@ -20,6 +25,7 @@ app.use(async ctx => {
 	const { id } = ctx.request.query
 	if (!id) {
 		ctx.throw(400, 'id required')
+		return
 	}
 	try {
 		ctx.body = await getVideo(id)

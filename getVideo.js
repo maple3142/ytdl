@@ -48,11 +48,14 @@ const getVideo = id =>
 					.map(x => ({ ...x, s: decsig(x.s) }))
 					.map(x => ({ ...x, url: x.url + `&signature=${x.s}&alr=yes` }))
 			}
-			let adaptive = obj.adaptive_fmts.split(',').map(parseQuery)
-			if (adaptive[0].sp && adaptive[0].sp.includes('signature')) {
-				adaptive = adaptive
-					.map(x => ({ ...x, s: decsig(x.s) }))
-					.map(x => ({ ...x, url: x.url + `&signature=${x.s}&alr=yes` }))
+			let adaptive = null
+			if (obj.adaptive_fmts) {
+				obj.adaptive_fmts.split(',').map(parseQuery)
+				if (adaptive[0].sp && adaptive[0].sp.includes('signature')) {
+					adaptive = adaptive
+						.map(x => ({ ...x, s: decsig(x.s) }))
+						.map(x => ({ ...x, url: x.url + `&signature=${x.s}&alr=yes` }))
+				}
 			}
 			return { stream, adaptive }
 		})

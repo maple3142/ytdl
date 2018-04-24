@@ -8,29 +8,26 @@ const parseQuery = s =>
 			.map(p => ({ [p[0]]: decodeURIComponent(p[1]) }))
 	)
 const decsig = a => {
-	// 2018/4/19
-	var qz = {
-		fG: function(a) {
+	// 2018/4/24
+	const $y = {
+		TL: function(a) {
 			a.reverse()
 		},
-		bL: function(a, b) {
+		kc: function(a, b) {
 			a.splice(0, b)
 		},
-		hT: function(a, b) {
+		vS: function(a, b) {
 			var c = a[0]
 			a[0] = a[b % a.length]
 			a[b % a.length] = c
 		}
 	}
 	a = a.split('')
-	qz.bL(a, 2)
-	qz.hT(a, 12)
-	qz.hT(a, 49)
-	qz.bL(a, 1)
-	qz.fG(a, 9)
-	qz.hT(a, 68)
-	qz.fG(a, 1)
-	qz.bL(a, 3)
+	$y.TL(a, 51)
+	$y.vS(a, 17)
+	$y.vS(a, 14)
+	$y.kc(a, 2)
+	$y.TL(a, 32)
 	return a.join('')
 }
 

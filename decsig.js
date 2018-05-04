@@ -1,8 +1,34 @@
 const axios = require('axios')
+const deasync = require('deasync')
 
 /*eslint max-len: ["off"]*/
 
-module.exports = () =>
+const fallback = a => {
+	// 2018/05/04
+	const Sy = {
+		kJ: function(a, b) {
+			var c = a[0]
+			a[0] = a[b % a.length]
+			a[b % a.length] = c
+		},
+		ZK: function(a) {
+			a.reverse()
+		},
+		Ug: function(a, b) {
+			a.splice(0, b)
+		}
+	}
+	a = a.split('')
+	Sy.Ug(a, 2)
+	Sy.ZK(a, 72)
+	Sy.Ug(a, 2)
+	Sy.ZK(a, 10)
+	Sy.Ug(a, 3)
+	Sy.kJ(a, 60)
+	return a.join('')
+}
+module.exports = (() => {
+	let fn = null
 	axios
 		.get('https://www.youtube.com/watch?v=-tKVN2mAKRI', {
 			headers: {
@@ -29,5 +55,9 @@ module.exports = () =>
 			//console.log(helpername)
 			const helper = new RegExp('var ' + helpername + '={[\\s\\S]+?};').exec(data)[0]
 			//console.log(helper)
-			return new Function([argname], helper + ';' + fnbody)
+			fn = new Function([argname], helper + ';' + fnbody)
 		})
+		.catch(e => (fn = fallback))
+	deasync.loopWhile(() => fn === null)
+	return fn
+})()

@@ -29,5 +29,5 @@ module.exports = () =>
 			//console.log(helpername)
 			const helper = new RegExp('var ' + helpername + '={[\\s\\S]+?};').exec(data)[0]
 			//console.log(helper)
-			return new Function(['a'], helper + ';' + fnbody)
+			return new Function([argname], helper + ';' + fnbody)
 		})

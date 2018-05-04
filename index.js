@@ -1,6 +1,6 @@
 const Koa = require('koa')
 const app = new Koa()
-const getVideo = require('./getVideo')
+const getVideo = require('./getvid')
 
 app.use(async (ctx, next) => {
 	await next()

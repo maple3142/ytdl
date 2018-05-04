@@ -5,6 +5,8 @@
 	"license": "MIT",
 	"dependencies": {
 		"axios": "^0.18.0",
+		"cheerio": "^1.0.0-rc.2",
+		"deasync": "^0.1.12",
 		"koa": "^2.5.0"
 	},
 	"scripts": {

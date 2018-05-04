@@ -35,7 +35,9 @@ const decsig = (() => {
 		return a.join('')
 	}
 	let r = null
-	getdec.then(fn => (r = fn)).catch(e => (r = def))
+	getdec()
+		.then(fn => (r = fn))
+		.catch(e => (r = def))
 	deasync.loopWhile(() => r === null)
 	return r
 })()

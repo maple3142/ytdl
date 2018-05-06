@@ -29,7 +29,7 @@ const getVideo = id =>
 				if (adaptive[0].sp && adaptive[0].sp.includes('signature')) {
 					adaptive = adaptive
 						.map(x => ({ ...x, s: decsig(x.s) }))
-						.map(x => ({ ...x, url: x.url + `&signature=${x.s}&alr=yes` }))
+						.map(x => ({ ...x, url: x.url + `&signature=${x.s}` }))
 				}
 			}
 			return { stream, adaptive }

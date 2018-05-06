@@ -1,6 +1,6 @@
 const axios = require('axios')
 const deasync = require('deasync')
-const decsig = require('./decsig')
+const getdecsig = require('./decsig')
 
 const parseQuery = s =>
 	Object.assign(
@@ -12,11 +12,12 @@ const parseQuery = s =>
 const getVideo = id =>
 	axios
 		.get(`http://www.youtube.com/get_video_info?video_id=${id}&el=embedded&ps=default&eurl=&gl=US&hl=en`)
-		.then(({ data }) => {
+		.then(async ({ data }) => {
 			const obj = parseQuery(data)
 			if (obj.status === 'fail') {
 				throw obj
 			}
+			const decsig = await getdecsig(id)
 			let stream = obj.url_encoded_fmt_stream_map.split(',').map(parseQuery)
 			if (stream[0].sp && stream[0].sp.includes('signature')) {
 				stream = stream

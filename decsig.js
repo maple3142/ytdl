@@ -27,10 +27,9 @@ const fallback = a => {
 	Sy.kJ(a, 60)
 	return a.join('')
 }
-module.exports = (() => {
-	let fn = null
-	axios
-		.get('https://www.youtube.com/watch?v=-tKVN2mAKRI', {
+module.exports = (id => {
+	return axios
+		.get(`https://www.youtube.com/watch?v=${id}`, {
 			headers: {
 				'User-Agent':
 					'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.139 Safari/537.36',
@@ -55,9 +54,7 @@ module.exports = (() => {
 			//console.log(helpername)
 			const helper = new RegExp('var ' + helpername + '={[\\s\\S]+?};').exec(data)[0]
 			//console.log(helper)
-			fn = new Function([argname], helper + ';' + fnbody)
+			return new Function([argname], helper + ';' + fnbody)
 		})
-		.catch(e => (fn = fallback))
-	deasync.loopWhile(() => fn === null)
-	return fn
-})()
+		.catch(e => fallback)
+})

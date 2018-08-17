@@ -10,31 +10,28 @@ const parseQuery = s =>
 			.map(p => ({ [p[0]]: decodeURIComponent(p[1]) }))
 	)
 const getVideo = id =>
-	axios
-		.get(`http://www.youtube.com/get_video_info?video_id=${id}&el=embedded&ps=default&eurl=&gl=US&hl=en`)
-		.then(async ({ data }) => {
-			const obj = parseQuery(data)
-			if (obj.status === 'fail') {
-				throw obj
-			}
-			const decsig = await getdecsig(id)
-			let stream = obj.url_encoded_fmt_stream_map.split(',').map(parseQuery)
-			if (stream[0].sp && stream[0].sp.includes('signature')) {
-				stream = stream
+	axios.get(`https://www.youtube.com/get_video_info?video_id=${id}&el=detailpage`).then(async ({ data }) => {
+		const obj = parseQuery(data)
+		if (obj.status === 'fail') {
+			throw obj
+		}
+		const decsig = await getdecsig(id)
+		let stream = obj.url_encoded_fmt_stream_map.split(',').map(parseQuery)
+		if (stream[0].sp && stream[0].sp.includes('signature')) {
+			console.log(stream)
+			stream = stream.map(x => ({ ...x, s: decsig(x.s) })).map(x => ({ ...x, url: x.url + `&signature=${x.s}` }))
+		}
+		let adaptive = null
+		if (obj.adaptive_fmts) {
+			adaptive = obj.adaptive_fmts.split(',').map(parseQuery)
+			if (adaptive[0].sp && adaptive[0].sp.includes('signature')) {
+				adaptive = adaptive
 					.map(x => ({ ...x, s: decsig(x.s) }))
 					.map(x => ({ ...x, url: x.url + `&signature=${x.s}` }))
 			}
-			let adaptive = null
-			if (obj.adaptive_fmts) {
-				adaptive = obj.adaptive_fmts.split(',').map(parseQuery)
-				if (adaptive[0].sp && adaptive[0].sp.includes('signature')) {
-					adaptive = adaptive
-						.map(x => ({ ...x, s: decsig(x.s) }))
-						.map(x => ({ ...x, url: x.url + `&signature=${x.s}` }))
-				}
-			}
-			return { stream, adaptive }
-		})
+		}
+		return { stream, adaptive }
+	})
 module.exports = getVideo
 
 if (require.main === module) {

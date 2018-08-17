@@ -6,7 +6,8 @@
 	"dependencies": {
 		"axios": "^0.18.0",
 		"deasync": "^0.1.12",
-		"koa": "^2.5.0"
+		"koa": "^2.5.0",
+		"node-telegram-bot-api": "^0.30.0"
 	},
 	"scripts": {
 		"start": "node index.js"

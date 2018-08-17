@@ -18,7 +18,6 @@ const getVideo = id =>
 		const decsig = await getdecsig(id)
 		let stream = obj.url_encoded_fmt_stream_map.split(',').map(parseQuery)
 		if (stream[0].sp && stream[0].sp.includes('signature')) {
-			console.log(stream)
 			stream = stream.map(x => ({ ...x, s: decsig(x.s) })).map(x => ({ ...x, url: x.url + `&signature=${x.s}` }))
 		}
 		let adaptive = null

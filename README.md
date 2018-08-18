@@ -17,3 +17,9 @@ A sample url to get information of **[DAOKO × 米津玄師『打上花火』MUS
 [https://maple-ytdl.herokuapp.com/?id=T2pdmZhDXfo&format=1](https://maple-ytdl.herokuapp.com/?id=T2pdmZhDXfo&format=1)
 
 > You can append `format=1` to get a human readable JSON.
+
+## Telegram bot
+
+[@ytdl3142_bot](http://t.me/ytdl3142_bot)
+
+Send video URL to the bot, and it will retrieve the raw video URL for you.

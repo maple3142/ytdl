@@ -45,7 +45,10 @@ bot.start(ctx => {
 })
 
 const WEBHOOK_PATH = '/bot' + process.env.TG_TOKEN
-bot.telegram.setWebhook(process.env.WEBHOOK_URL + WEBHOOK_PATH)
+bot.telegram
+	.setWebhook(process.env.WEBHOOK_URL + WEBHOOK_PATH)
+	.then(() => bot.telegram.getWebhookInfo())
+	.then(console.info)
 exports.bot = bot
 exports.WEBHOOK_PATH = WEBHOOK_PATH
 

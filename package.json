@@ -11,6 +11,9 @@
 		"node-telegram-bot-api": "^0.30.0",
 		"telegraf": "^3.22.2"
 	},
+	"engines": {
+		"node": "10.1.0"
+	},
 	"scripts": {
 		"start": "node index.js"
 	}

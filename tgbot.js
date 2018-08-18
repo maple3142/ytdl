@@ -1,14 +1,6 @@
-// https://github.com/yagop/node-telegram-bot-api/issues/476
-process.env.NTBA_FIX_319 = 1
-
-const TelegramBot = require('node-telegram-bot-api')
+const Telegraf = require('telegraf')
 const getVideo = require('./getvid')
-const bot = new TelegramBot(process.env.TG_TOKEN, { webHook: { autoOpen: false, port: process.env.PORT } })
-
-bot.openWebHook()
-	.then(() => bot.setWebHook(process.env.WEBHOOK_URL + '/bot' + process.env.TG_TOKEN))
-	.then(() => bot.getWebHookInfo())
-	.then(console.log)
+const bot = new Telegraf(process.env.TG_TOKEN)
 
 const parseId = url => {
 	const u = new URL(url)
@@ -28,21 +20,35 @@ const parseId = url => {
 			throw new Error('Invalid URL!')
 	}
 }
-bot.on('text', async msg => {
+bot.hears(/(youtube\.com|youtu\.be)/, async ctx => {
+	const msg = ctx.update.message
 	console.info(msg)
 	try {
 		const id = parseId(msg.text.trim())
 		const { stream, adaptive } = await getVideo(id)
 		const sstr = '**Stream**\n' + stream.map(s => `[${s.quality}](${s.url})`).join('\n')
-		await bot.sendMessage(msg.chat.id, sstr, { parse_mode: 'Markdown' })
+		await ctx.tg.sendMessage(msg.chat.id, sstr, { parse_mode: 'Markdown' })
 		const astr =
 			'**Adaptive**\n' +
 			adaptive.map(s => `[${(s.quality_label ? s.quality_label + ':' : '') + s.type}](${s.url})`).join('\n')
-		await bot.sendMessage(msg.chat.id, astr, { parse_mode: 'Markdown' })
+		await ctx.tg.sendMessage(msg.chat.id, astr, { parse_mode: 'Markdown' })
 	} catch (e) {
-		bot.sendMessage(
-			msg.chat.id,
-			'Invalid URL!\nSend a correct URL to me, and I will retrive raw YouTube url for you.'
+		console.error(e)
+		await ctx.tg.sendMessage(
+			ctx.chat.id,
+			'Invalid URL!\nSend a correct URL to me, and I will retrieve raw video URL for you.'
 		)
 	}
 })
+bot.start(ctx => {
+	return ctx.tg.sendMessage('Send a YouTube video URL to me, and I will retrieve raw video URL for you.')
+})
+
+const WEBHOOK_PATH = '/bot' + process.env.TG_TOKEN
+bot.telegram.setWebhook(process.env.WEBHOOK_URL + WEBHOOK_PATH)
+exports.bot = bot
+exports.WEBHOOK_PATH = WEBHOOK_PATH
+
+if (require.main === module) {
+	bot.startWebhook(WEBHOOK_PATH, null, process.env.PORT)
+}

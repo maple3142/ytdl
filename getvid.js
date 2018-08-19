@@ -29,7 +29,7 @@ const getVideo = id =>
 					.map(x => ({ ...x, url: x.url + `&signature=${x.s}` }))
 			}
 		}
-		return { stream, adaptive }
+		return { stream, adaptive, meta: obj }
 	})
 module.exports = getVideo
 

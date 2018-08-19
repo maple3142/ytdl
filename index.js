@@ -7,10 +7,13 @@ const { bot, WEBHOOK_PATH } = require('./tgbot')
 app.use(koaBody())
 
 // tg bot handling
-app.use(
-	(ctx, next) =>
-		ctx.method === 'POST' || ctx.url === WEBHOOK_PATH ? bot.handleUpdate(ctx.request.body, ctx.response) : next()
-)
+app.use((ctx, next) => {
+	if (ctx.url === WEBHOOK_PATH) {
+		bot.processUpdate(ctx.request.body)
+		ctx.status = 200
+		return
+	} else return next()
+})
 
 app.use(async (ctx, next) => {
 	await next()
@@ -22,13 +25,6 @@ app.use(async (ctx, next) => {
 	await next()
 	const ms = Date.now() - start
 	ctx.set('X-Response-Time', `${ms}ms`)
-})
-
-app.use(async (ctx, next) => {
-	const start = Date.now()
-	await next()
-	const ms = Date.now() - start
-	console.log(`${ctx.method} ${ctx.url} - ${ms}ms`)
 })
 
 app.use(async (ctx, next) => {

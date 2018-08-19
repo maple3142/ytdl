@@ -73,7 +73,7 @@ bot.on('text', async msg => {
 			invalidUrlCnt++
 		}
 	}
-	if (invalidUrlCnt === lines.length) {
+	if (invalidUrlCnt === urls.length) {
 		// show error message if the message doesn't contain any URL
 		await bot.sendMessage(
 			msg.chat.id,

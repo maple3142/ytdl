@@ -40,7 +40,7 @@ bot.on('text', async msg => {
 	}
 	console.info(msg)
 	const urls = getUrls(msg.text)
-	let invalidUrlCnt = 0
+	let validUrlCnt = 0
 	for (const url of urls) {
 		try {
 			const id = parseId(url)
@@ -69,11 +69,12 @@ bot.on('text', async msg => {
 				parse_mode: 'Markdown',
 				reply_to_message_id: photomsgid
 			})
+			validUrlCnt++
 		} catch (e) {
-			invalidUrlCnt++
+			// invalid url
 		}
 	}
-	if (invalidUrlCnt === urls.length) {
+	if (validUrlCnt === 0) {
 		// show error message if the message doesn't contain any URL
 		await bot.sendMessage(
 			msg.chat.id,

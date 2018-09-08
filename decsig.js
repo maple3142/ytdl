@@ -30,7 +30,7 @@ const fallback = a => {
 	return a.join('')
 }
 const parsedecsig = data => {
-	const fnnameresult = /\"signature\"\),.+?\.set\(.+?,(.+?)\(/.exec(data)
+	const fnnameresult = /yt\.akamaized\.net\/\)\|\|.\.set\(.*?\);.*?set\(.,(.*)\(/.exec(data)
 	const fnname = fnnameresult[1]
 	const _argnamefnbodyresult = new RegExp(fnname + '=function\\((.+?)\\){(.+?)}').exec(data)
 	const [_, argname, fnbody] = _argnamefnbodyresult

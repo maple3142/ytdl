@@ -4,12 +4,12 @@
 	"main": "index.js",
 	"license": "MIT",
 	"dependencies": {
-		"axios": "^0.18.0",
 		"deasync": "^0.1.12",
 		"get-urls": "^7.2.0",
 		"koa": "^2.5.0",
 		"koa-body": "^4.0.4",
-		"node-telegram-bot-api": "^0.30.0"
+		"node-telegram-bot-api": "^0.30.0",
+		"xfetch-js": "^0.1.3"
 	},
 	"engines": {
 		"node": "10.1.0"

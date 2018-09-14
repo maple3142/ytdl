@@ -1,5 +1,4 @@
-const axios = require('axios')
-const deasync = require('deasync')
+const xf = require('xfetch-js/node')
 const getdecsig = require('./decsig')
 
 const parseQuery = s =>
@@ -10,7 +9,7 @@ const parseQuery = s =>
 			.map(p => ({ [p[0]]: decodeURIComponent(p[1]) }))
 	)
 const getVideo = id =>
-	axios.get(`https://www.youtube.com/get_video_info?video_id=${id}&el=detailpage`).then(async ({ data }) => {
+	xf.get(`https://www.youtube.com/get_video_info?video_id=${id}&el=detailpage`).text().then(async data => {
 		const obj = parseQuery(data)
 		if (obj.status === 'fail') {
 			throw obj
@@ -36,6 +35,6 @@ module.exports = getVideo
 if (require.main === module) {
 	const ID = process.argv[2] || '-tKVN2mAKRI'
 	getVideo(ID)
-		.then(mp => console.log(JSON.stringify(mp, null, 2)))
+		.then(mp => console.log(JSON.stringify(mp.stream, null, 2)))
 		.catch(console.error)
 }

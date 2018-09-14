@@ -1,4 +1,4 @@
-const axios = require('axios')
+const xf = require('xfetch-js/node')
 const deasync = require('deasync')
 
 /*eslint max-len: ["off"]*/
@@ -41,22 +41,22 @@ const parsedecsig = data => {
 	return new Function([argname], helper + '\n' + fnbody)
 }
 module.exports = id => {
-	return axios
+	return xf
 		.get(`https://www.youtube.com/watch?v=${id}`, {
 			headers: {
-				'User-Agent':
-					'Mozilla/5.0 Chrome',
+				'User-Agent': 'Mozilla/5.0 Chrome',
 				'Accept-Language': 'en',
 				Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
 				dnt: 1
 			}
 		})
-		.then(({ data }) => {
+		.text()
+		.then(data => {
 			const d = /<script >(var ytplayer[\s\S]*?)<\/script>/.exec(data)
 			const window = {}
 			eval(d[1])
-			return axios.get('https://youtube.com' + ytplayer.config.assets.js)
+			return xf.get('https://youtube.com' + ytplayer.config.assets.js).text()
 		})
-		.then(({ data }) => parsedecsig(data))
+		.then(data => parsedecsig(data))
 		.catch(e => console.info('use fallback', e) || fallback)
 }

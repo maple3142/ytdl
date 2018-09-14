@@ -23,3 +23,9 @@ A sample url to get information of **[DAOKO × 米津玄師『打上花火』MUS
 [@ytdl3142_bot](http://t.me/ytdl3142_bot)
 
 Send video URL to the bot, and it will retrieve the raw video URL for you.
+
+## Userscript
+
+[Local YouTube Downloader](https://greasyfork.org/zh-TW/scripts/369400-local-youtube-downloader)
+
+A simple youtube link fetcher implemented in browser.

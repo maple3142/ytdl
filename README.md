@@ -37,7 +37,6 @@ Graphiql: [https://maple-ytdl.herokuapp.com/graphql](https://maple-ytdl.herokuap
     }
   }
 }
-
 ```
 
 ## Telegram bot

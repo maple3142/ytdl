@@ -15,18 +15,21 @@ type Stream {
 	sp: String
 }
 type Adaptive {
-	itag: String
-	url: String
-	clen: String
-	init: String
-	index: String
-	bitrate: String
-	s: String
 	lmt: String
-	type: String
-	projection_type: String
-	sp: String
 	xtags: String
+	clen: String
+	projection_type: String
+	quality_label: String
+	type: String
+	url: String
+	sp: String
+	itag: String
+	s: String
+	init: String
+	size: String
+	index: String
+	fps: String
+	bitrate: String
 }
 type Meta {
 	player_response: String

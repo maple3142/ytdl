@@ -1,8 +1,11 @@
 const Koa = require('koa')
 const koaBody = require('koa-body')
+const mount = require('koa-mount')
+const graphqlHTTP = require('koa-graphql')
 const app = new Koa()
 const getVideo = require('./getvid')
 const { bot, WEBHOOK_PATH } = require('./tgbot')
+const gql = require('./gql')
 
 app.use(koaBody())
 
@@ -14,6 +17,18 @@ app.use((ctx, next) => {
 		return
 	} else return next()
 })
+
+// gql
+app.use(
+	mount(
+		'/graphql',
+		graphqlHTTP({
+			schema: gql.schema,
+			rootValue: gql.root,
+			graphiql: true
+		})
+	)
+)
 
 app.use(async (ctx, next) => {
 	await next()

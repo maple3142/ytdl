@@ -1,4 +1,5 @@
 const xf = require('xfetch-js')
+const { createsafefn, runInContext } = require('./sandboxutil')
 
 /*eslint max-len: ["off"]*/
 
@@ -37,24 +38,17 @@ const parsedecsig = data => {
 	const helpername = helpernameresult[1]
 	const helperresult = new RegExp('var ' + helpername + '={[\\s\\S]+?};').exec(data)
 	const helper = helperresult[0]
-	return new Function([argname], helper + '\n' + fnbody)
+	return createsafefn(new Function([argname], helper + '\n' + fnbody))
 }
 module.exports = id => {
 	return xf
-		.get(`https://www.youtube.com/watch?v=${id}`, {
-			headers: {
-				'User-Agent': 'Mozilla/5.0 Chrome',
-				'Accept-Language': 'en',
-				Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
-				dnt: 1
-			}
-		})
+		.get(`https://www.youtube.com/watch?v=${id}`)
 		.text()
 		.then(data => {
 			const d = /<script >(var ytplayer[\s\S]*?)<\/script>/.exec(data)
 			const window = {}
-			eval(d[1])
-			return xf.get('https://youtube.com' + ytplayer.config.assets.js).text()
+			runInContext(d[1] + ';window.ytplayer = ytplayer', { window }) // This script will throw an error if no window is provided
+			return xf.get('https://youtube.com' + window.ytplayer.config.assets.js).text()
 		})
 		.then(data => parsedecsig(data))
 		.catch(e => console.info('use fallback', e) || fallback)

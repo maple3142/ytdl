@@ -13,6 +13,7 @@
 		"koa-mount": "^3.0.0",
 		"node-telegram-bot-api": "^0.30.0",
 		"qs": "^6.5.2",
+		"vm2": "^3.6.3",
 		"xfetch-js": "^0.1.4"
 	},
 	"engines": {

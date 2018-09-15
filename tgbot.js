@@ -5,9 +5,8 @@ const getUrls = require('get-urls')
 const xf = require('xfetch-js')
 const TelegramBot = require('node-telegram-bot-api')
 const getVideo = require('./getvid')
+const getBestThumbnail = require('./thumbnail')
 const bot = new TelegramBot(process.env.TG_TOKEN)
-
-const YT_THUMB_RES_ORDER = ['maxresdefault', 'hqdefault', 'mqdefault', 'sddefault', 'default']
 
 const parseId = url => {
 	try {
@@ -45,18 +44,7 @@ bot.on('text', async msg => {
 		try {
 			const id = parseId(url)
 			const { stream, adaptive, meta } = await getVideo(id)
-			let thumbnail
-			for (const res of YT_THUMB_RES_ORDER) {
-				// try every thumbnail resolution
-				try {
-					thumbnail = meta.thumbnail_url.replace('default', res)
-					await xf.head(thumbnail)
-					// if success, continue to next step
-					break
-				} catch (e) {
-					// if errror, try next resolution
-				}
-			}
+			const thumbnail = await getBestThumbnail(meta.thumbnail_url)
 			const { message_id: photomsgid } = await bot.sendPhoto(msg.chat.id, thumbnail, {
 				caption: `[${meta.title}](https://www.youtube.com/watch?v=${id})`,
 				parse_mode: 'Markdown'

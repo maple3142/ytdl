@@ -1,5 +1,5 @@
 const xf = require('xfetch-js')
-const { createsafefn, runInContext } = require('./sandboxutil')
+const { createSafeFn, runInContext } = require('./sandboxutil')
 
 /*eslint max-len: ["off"]*/
 
@@ -38,7 +38,7 @@ const parsedecsig = data => {
 	const helpername = helpernameresult[1]
 	const helperresult = new RegExp('var ' + helpername + '={[\\s\\S]+?};').exec(data)
 	const helper = helperresult[0]
-	return createsafefn(new Function([argname], helper + '\n' + fnbody))
+	return createSafeFn(new Function([argname], helper + '\n' + fnbody))
 }
 module.exports = id => {
 	return xf

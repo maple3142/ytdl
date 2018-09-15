@@ -1,12 +1,11 @@
 const { VM } = require('vm2')
 
 exports.runInContext = (code, ctx) => {
-	const vm = new VM({ sandbox: ctx })
+	const vm = new VM({ sandbox: ctx, timeout: 100 })
 	return vm.run(code)
 }
-exports.createsafefn = fn => {
-	const sandbox = { module: {} }
-	const vm = new VM({ sandbox })
-	vm.run(`module.exports = ${fn.toString()}`)
-	return (...args) => sandbox.module.exports(...args)
+exports.createSafeFn = fn => {
+	const vm = new VM({ timeout: 100 })
+	vm.run(`const fn = ${fn.toString()}`)
+	return (...args) => vm.run(`fn(${args.map(JSON.stringify).join(',')})`)
 }

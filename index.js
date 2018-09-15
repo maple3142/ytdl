@@ -9,13 +9,19 @@ const gql = require('./gql')
 
 app.use(koaBody())
 
-// tg bot handling
+// tg bot
 app.use((ctx, next) => {
 	if (ctx.url === WEBHOOK_PATH) {
 		bot.processUpdate(ctx.request.body)
 		ctx.status = 200
 		return
 	} else return next()
+})
+
+// cors
+app.use(async (ctx, next) => {
+	await next()
+	ctx.set('Access-Control-Allow-Origin', '*')
 })
 
 // gql
@@ -30,11 +36,7 @@ app.use(
 	)
 )
 
-app.use(async (ctx, next) => {
-	await next()
-	ctx.set('Access-Control-Allow-Origin', '*')
-})
-
+// response time
 app.use(async (ctx, next) => {
 	const start = Date.now()
 	await next()
@@ -42,6 +44,7 @@ app.use(async (ctx, next) => {
 	ctx.set('X-Response-Time', `${ms}ms`)
 })
 
+// format
 app.use(async (ctx, next) => {
 	await next()
 	const { format } = ctx.request.query
@@ -50,6 +53,7 @@ app.use(async (ctx, next) => {
 	}
 })
 
+// api
 app.use(async ctx => {
 	if (ctx.path === '/api') {
 		const { id } = ctx.request.query

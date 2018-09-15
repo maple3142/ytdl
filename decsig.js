@@ -1,5 +1,4 @@
-const xf = require('xfetch-js/node')
-const deasync = require('deasync')
+const xf = require('xfetch-js')
 
 /*eslint max-len: ["off"]*/
 

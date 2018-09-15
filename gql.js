@@ -1,5 +1,5 @@
 const getVideo = require('./getvid')
-const { buildSchema, graphql } = require('graphql')
+const { buildSchema } = require('graphql')
 const fs = require('fs')
 
 const schema = buildSchema(fs.readFileSync(__dirname + '/schema.gql').toString())

@@ -2,7 +2,7 @@
 process.env.NTBA_FIX_319 = 1
 
 const getUrls = require('get-urls')
-const axios = require('axios')
+const xf = require('xfetch-js')
 const TelegramBot = require('node-telegram-bot-api')
 const getVideo = require('./getvid')
 const bot = new TelegramBot(process.env.TG_TOKEN)
@@ -50,7 +50,7 @@ bot.on('text', async msg => {
 				// try every thumbnail resolution
 				try {
 					thumbnail = meta.thumbnail_url.replace('default', res)
-					await axios.head(thumbnail)
+					await xf.head(thumbnail)
 					// if success, continue to next step
 					break
 				} catch (e) {

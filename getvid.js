@@ -1,4 +1,4 @@
-const xf = require('xfetch-js/node')
+const xf = require('xfetch-js')
 const getdecsig = require('./decsig')
 
 const parseQuery = s =>

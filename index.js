@@ -51,15 +51,17 @@ app.use(async (ctx, next) => {
 })
 
 app.use(async ctx => {
-	const { id } = ctx.request.query
-	if (!id) {
-		ctx.throw(400, 'id required')
-		return
-	}
-	try {
-		ctx.body = await getVideo(id)
-	} catch (e) {
-		ctx.body = e
+	if (ctx.path === '/api') {
+		const { id } = ctx.request.query
+		if (!id) {
+			ctx.throw(400, 'id required')
+			return
+		}
+		try {
+			ctx.body = await getVideo(id)
+		} catch (e) {
+			ctx.body = e
+		}
 	}
 })
 

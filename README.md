@@ -2,21 +2,43 @@
 
 > Get youtube video download url
 
-## Demo
-
-### JSON api
+## JSON api
 
 A sample url to get information of **[DAOKO × 米津玄師『打上花火』MUSIC VIDEO](https://www.youtube.com/watch?v=-tKVN2mAKRI)**.
 
-[https://maple-ytdl.herokuapp.com/?id=-tKVN2mAKRI](https://maple-ytdl.herokuapp.com/?id=-tKVN2mAKRI)
+[https://maple-ytdl.herokuapp.com/api?id=-tKVN2mAKRI](https://maple-ytdl.herokuapp.com/?id=-tKVN2mAKRI)
 
 > To download other video, just change id in the url.
 
-### human readable
+### Formatted version
 
-[https://maple-ytdl.herokuapp.com/?id=T2pdmZhDXfo&format=1](https://maple-ytdl.herokuapp.com/?id=T2pdmZhDXfo&format=1)
+[https://maple-ytdl.herokuapp.com/api?id=T2pdmZhDXfo&format=1](https://maple-ytdl.herokuapp.com/?id=T2pdmZhDXfo&format=1)
 
 > You can append `format=1` to get a human readable JSON.
+
+## Graphql
+
+Graphiql: [https://maple-ytdl.herokuapp.com/graphql](https://maple-ytdl.herokuapp.com/graphql)
+
+```graphql
+{
+  search(id: "XogSflwXgpw") {
+    meta {
+      title
+      thumbnail_url
+      author
+      view_count
+    }
+    stream {
+      quality
+      type
+      url
+      itag
+    }
+  }
+}
+
+```
 
 ## Telegram bot
 

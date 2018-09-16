@@ -5,7 +5,7 @@ const qs = require('qs')
 
 const getVideo = id =>
 	xf
-		.get(`https://www.youtube.com/get_video_info?video_id=${id}&el=detailpage`)
+		.get(`https://www.youtube.com/get_video_info`, { qs: { video_id: id, el: 'detailpage' } })
 		.text()
 		.then(async data => {
 			const obj = qs.parse(data)

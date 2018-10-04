@@ -11,8 +11,11 @@
 		"koa-body": "^4.0.4",
 		"koa-graphql": "^0.7.5",
 		"koa-mount": "^3.0.0",
+		"lz-string": "^1.4.4",
+		"memory-cache": "^0.2.0",
 		"node-telegram-bot-api": "^0.30.0",
 		"qs": "^6.5.2",
+		"uuid": "^3.3.2",
 		"vm2": "^3.6.3",
 		"xfetch-js": "^0.1.4"
 	},

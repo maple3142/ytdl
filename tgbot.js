@@ -1,7 +1,6 @@
 // https://github.com/yagop/node-telegram-bot-api/issues/476
 process.env.NTBA_FIX_319 = 1
 
-const getUrls = require('get-urls')
 const cache = require('memory-cache')
 const uuidv4 = require('uuid/v4')
 const TelegramBot = require('node-telegram-bot-api')
@@ -33,7 +32,10 @@ const parseId = url => {
 		throw new Error('Invalid URL!')
 	}
 }
+const getUrlsFromMsg = msg =>
+	msg.entities.filter(e => e.type === 'url').map(e => msg.text.slice(e.offset, e.offset + e.length))
 bot.on('text', async msg => {
+	console.info(msg)
 	if (/^\/start/.test(msg.text)) {
 		return bot.sendMessage(
 			msg.chat.id,
@@ -42,7 +44,7 @@ bot.on('text', async msg => {
 	}
 	if (/^\/play/.test(msg.text)) {
 		const id = msg.text.slice(6) //strip
-		const url = cache.get(id)
+		const { url, mime, title } = cache.get(id) || {}
 		if (!url) {
 			return bot.sendMessage(
 				msg.chat.id,
@@ -50,17 +52,24 @@ bot.on('text', async msg => {
 			)
 		} else {
 			console.info(`${id} -> ${url}`)
-			return bot.sendVideo(msg.chat.id, url).catch(() =>
+			const handleError = e => {
+				console.info(e.response.body)
 				bot.sendMessage(
 					msg.chat.id,
 					`Failed to send video! Please try the others.
 Possible reasons: Telegram doesn\'t support this filetype or the video to too big.`
 				)
-			)
+			}
+			if (mime.includes('video')) {
+				return bot.sendVideo(msg.chat.id, url, {}, { filename: title, contentType: mime }).catch(handleError)
+			} else if (mime.includes('audio')) {
+				return bot.sendAudio(msg.chat.id, url, {}, { filename: title, contentType: mime }).catch(handleError)
+			} else {
+				return bot.sendMessage(msg.chat.id, 'This video is not supported to play in Telegram.')
+			}
 		}
 	}
-	console.info(msg)
-	const urls = getUrls(msg.text)
+	const urls = getUrlsFromMsg(msg)
 	let validUrlCnt = 0
 	for (const url of urls) {
 		try {
@@ -70,11 +79,27 @@ Possible reasons: Telegram doesn\'t support this filetype or the video to too bi
 			// add video uuid
 			for (const s of stream) {
 				s.uuid = uuidv4().replace(/-/g, '_')
-				cache.put(s.uuid, s.url, AN_HOUR)
+				cache.put(
+					s.uuid,
+					{
+						url: s.url,
+						mime: s.type,
+						title: meta.title
+					},
+					AN_HOUR
+				)
 			}
 			for (const s of adaptive) {
 				s.uuid = uuidv4().replace(/-/g, '_')
-				cache.put(s.uuid, s.url, AN_HOUR)
+				cache.put(
+					s.uuid,
+					{
+						url: s.url,
+						mime: s.type,
+						title: meta.title
+					},
+					AN_HOUR
+				)
 			}
 
 			const thumbnail = await getBestThumbnail(meta.thumbnail_url)
@@ -84,7 +109,9 @@ Possible reasons: Telegram doesn\'t support this filetype or the video to too bi
 			})
 			const sstr =
 				'**Stream**\n' +
-				stream.map(s => `[${s.quality}](${s.url}) /play\\_${s.uuid.replace(/_/g, '\\_')}`).join('\n\n')
+				stream
+					.map(s => `[${s.quality}:${s.type}](${s.url}) /play\\_${s.uuid.replace(/_/g, '\\_')}`)
+					.join('\n\n')
 			const astr =
 				'**Adaptive**\n' +
 				adaptive

@@ -5,13 +5,11 @@
 	"license": "MIT",
 	"dependencies": {
 		"deasync": "^0.1.12",
-		"get-urls": "^7.2.0",
 		"graphql": "^14.0.2",
 		"koa": "^2.5.0",
 		"koa-body": "^4.0.4",
 		"koa-graphql": "^0.7.5",
 		"koa-mount": "^3.0.0",
-		"lz-string": "^1.4.4",
 		"memory-cache": "^0.2.0",
 		"node-telegram-bot-api": "^0.30.0",
 		"qs": "^6.5.2",

@@ -28,7 +28,7 @@ const fallback = a => {
 }
 
 const parsedecsig = data => {
-	const fnnameresult = /yt\.akamaized\.net\/\)\|\|.\.set\(.*?\);.*?set\(.,(.*)\(/.exec(data)
+	const fnnameresult = /yt\.akamaized\.net.*encodeURIComponent\)\((\w+)/.exec(data)
 	const fnname = fnnameresult[1]
 	const _argnamefnbodyresult = new RegExp(fnname + '=function\\((.+?)\\){(.+?)}').exec(data)
 	const [_, argname, fnbody] = _argnamefnbodyresult

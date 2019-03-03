@@ -1,25 +1,29 @@
 const xf = require('xfetch-js')
 const { createSafeFn, runInContext } = require('./sandboxutil')
 
-const fallback = function anonymous(a) {
-	// 20190207
-	var Dv = {
-		Ed: function(a, b) {
+const fallback = function(a) {
+	// 20190303
+	var mv = {
+		gJ: function(a, b) {
 			a.splice(0, b)
 		},
-		SR: function(a) {
-			a.reverse()
-		},
-		Q3: function(a, b) {
+		Ym: function(a, b) {
 			var c = a[0]
 			a[0] = a[b % a.length]
 			a[b % a.length] = c
+		},
+		TY: function(a) {
+			a.reverse()
 		}
 	}
 	a = a.split('')
-	Dv.Ed(a, 1)
-	Dv.Q3(a, 55)
-	Dv.Q3(a, 49)
+	mv.Ym(a, 54)
+	mv.Ym(a, 25)
+	mv.gJ(a, 1)
+	mv.TY(a, 21)
+	mv.Ym(a, 62)
+	mv.Ym(a, 35)
+	mv.Ym(a, 17)
 	return a.join('')
 }
 

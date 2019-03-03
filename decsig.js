@@ -24,6 +24,13 @@ const fallback = function anonymous(a) {
 }
 
 const parsedecsig = data => {
+	if (data.startsWith('var script')) {
+		// they inject the script via script tag
+		const obj = {}
+		const document = { createElement: () => obj, head: { appendChild: () => {} } }
+		eval(data)
+		data = obj.innerHTML
+	}
 	const fnnameresult = /yt\.akamaized\.net.*encodeURIComponent\((\w+)/.exec(data)
 	const fnname = fnnameresult[1]
 	const _argnamefnbodyresult = new RegExp(fnname + '=function\\((.+?)\\){(.+?)}').exec(data)

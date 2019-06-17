@@ -17,7 +17,7 @@ const getVideo = id =>
 			if (stream[0].sp && stream[0].sp.includes('sig')) {
 				stream = stream
 					.map(x => ({ ...x, s: decsig(x.s) }))
-					.map(x => ({ ...x, url: x.url + `&signature=${x.s}` }))
+					.map(x => ({ ...x, url: x.url + `&sig=${x.s}` }))
 			}
 			let adaptive = null
 			if (obj.adaptive_fmts) {
@@ -25,7 +25,7 @@ const getVideo = id =>
 				if (adaptive[0].sp && adaptive[0].sp.includes('sig')) {
 					adaptive = adaptive
 						.map(x => ({ ...x, s: decsig(x.s) }))
-						.map(x => ({ ...x, url: x.url + `&signature=${x.s}` }))
+						.map(x => ({ ...x, url: x.url + `&sig=${x.s}` }))
 				}
 			}
 			obj.thumbnail_url = await getBestThumbnail(obj.thumbnail_url)

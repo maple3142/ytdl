@@ -14,7 +14,7 @@ const getVideo = id =>
 			}
 			const decsig = await getdecsig(id)
 			let stream = obj.url_encoded_fmt_stream_map.split(',').map(qs.parse)
-			if (stream[0].sp && stream[0].sp.includes('signature')) {
+			if (stream[0].sp && stream[0].sp.includes('sig')) {
 				stream = stream
 					.map(x => ({ ...x, s: decsig(x.s) }))
 					.map(x => ({ ...x, url: x.url + `&signature=${x.s}` }))
@@ -22,7 +22,7 @@ const getVideo = id =>
 			let adaptive = null
 			if (obj.adaptive_fmts) {
 				adaptive = obj.adaptive_fmts.split(',').map(qs.parse)
-				if (adaptive[0].sp && adaptive[0].sp.includes('signature')) {
+				if (adaptive[0].sp && adaptive[0].sp.includes('sig')) {
 					adaptive = adaptive
 						.map(x => ({ ...x, s: decsig(x.s) }))
 						.map(x => ({ ...x, url: x.url + `&signature=${x.s}` }))

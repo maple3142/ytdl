@@ -1,29 +1,25 @@
 const xf = require('xfetch-js')
 const { createSafeFn, runInContext } = require('./sandboxutil')
 
-const fallback = function(a) {
-	// 20190303
-	var mv = {
-		gJ: function(a, b) {
+const fallback = a => {
+	// 20190621
+	var Av = {
+		CZ: function(a, b) {
 			a.splice(0, b)
 		},
-		Ym: function(a, b) {
+		VW: function(a) {
+			a.reverse()
+		},
+		oN: function(a, b) {
 			var c = a[0]
 			a[0] = a[b % a.length]
 			a[b % a.length] = c
-		},
-		TY: function(a) {
-			a.reverse()
 		}
 	}
 	a = a.split('')
-	mv.Ym(a, 54)
-	mv.Ym(a, 25)
-	mv.gJ(a, 1)
-	mv.TY(a, 21)
-	mv.Ym(a, 62)
-	mv.Ym(a, 35)
-	mv.Ym(a, 17)
+	Av.oN(a, 20)
+	Av.VW(a, 50)
+	Av.oN(a, 17)
 	return a.join('')
 }
 
@@ -35,7 +31,7 @@ const parsedecsig = data => {
 		eval(data)
 		data = obj.innerHTML
 	}
-	const fnnameresult = /yt\.akamaized\.net.*encodeURIComponent\((\w+)/.exec(data)
+	const fnnameresult = /\.set\([^,]*,encodeURIComponent\(([^(]*)\(/.exec(data)
 	const fnname = fnnameresult[1]
 	const _argnamefnbodyresult = new RegExp(fnname + '=function\\((.+?)\\){(.+?)}').exec(data)
 	const [_, argname, fnbody] = _argnamefnbodyresult

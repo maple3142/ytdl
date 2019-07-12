@@ -17,7 +17,7 @@ const limiter = new RateLimiterMemory({
 app.use(async (ctx, next) => {
 	try {
 		await limiter.consume(ctx.request.headers['x-forwarded-for'].split(',')[0])
-		next() // don't wait and catch
+		await next()
 	} catch (e) {
 		ctx.status = 429
 		ctx.body = 'Too Many Requests'

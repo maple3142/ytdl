@@ -7,6 +7,7 @@ const app = new Koa()
 const getVideo = require('./getvid')
 const gql = require('./gql')
 
+app.proxy = true
 app.use(koaBody())
 
 // Ratelimit, prevent someone from abusing the demo site
@@ -16,7 +17,8 @@ const limiter = new RateLimiterMemory({
 })
 app.use(async (ctx, next) => {
 	try {
-		await limiter.consume(ctx.request.headers['x-forwarded-for'].split(',')[0])
+		console.log('Request IP: %s', ctx.ip)
+		await limiter.consume(ctx.ip)
 		await next()
 	} catch (e) {
 		ctx.status = 429

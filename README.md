@@ -51,12 +51,6 @@ Variables:
 }
 ```
 
-## Telegram bot
-
-[@ytdl3142_bot](http://t.me/ytdl3142_bot)
-
-Send video URL to the bot, and it will retrieve the raw video URL for you.
-
 ## Userscript
 
 [Local YouTube Downloader](https://greasyfork.org/zh-TW/scripts/369400-local-youtube-downloader)

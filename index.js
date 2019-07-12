@@ -4,19 +4,9 @@ const mount = require('koa-mount')
 const graphqlHTTP = require('koa-graphql')
 const app = new Koa()
 const getVideo = require('./getvid')
-const { bot, WEBHOOK_PATH } = require('./tgbot')
 const gql = require('./gql')
 
 app.use(koaBody())
-
-// tg bot
-app.use((ctx, next) => {
-	if (ctx.url === WEBHOOK_PATH) {
-		bot.processUpdate(ctx.request.body)
-		ctx.status = 200
-		return
-	} else return next()
-})
 
 // cors
 app.use(async (ctx, next) => {

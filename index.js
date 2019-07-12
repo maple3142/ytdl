@@ -16,14 +16,16 @@ const limiter = new RateLimiterMemory({
 	duration: 3600
 })
 app.use(async (ctx, next) => {
+	let allowed = true
 	try {
-		console.log('Request IP: %s', ctx.ip)
 		await limiter.consume(ctx.ip)
 		await next()
 	} catch (e) {
 		ctx.status = 429
 		ctx.body = 'Too Many Requests'
+		allowed = false
 	}
+	console.log('Request IP: %s, Allowed: %s, Path: %s', ctx.ip, allowed, ctx.path)
 })
 
 // cors

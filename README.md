@@ -6,21 +6,21 @@
 
 A sample url to get information of **[DAOKO × 米津玄師『打上花火』MUSIC VIDEO](https://www.youtube.com/watch?v=-tKVN2mAKRI)**.
 
-[https://maple3142-ytdl.glitch.me/api?id=-tKVN2mAKRI](https://maple3142-ytdl.glitch.me/api?id=-tKVN2mAKRI)
+[https://maple3142-ytdl-demo.glitch.me/api?id=-tKVN2mAKRI](https://maple3142-ytdl-demo.glitch.me/api?id=-tKVN2mAKRI)
 
 > To download other video, just change id in the url.
 
 ### Formatted version
 
-[https://maple3142-ytdl.glitch.me/api?id=T2pdmZhDXfo&format=1](https://maple3142-ytdl.glitch.me/api?id=T2pdmZhDXfo&format=1)
+[https://maple3142-ytdl-demo.glitch.me/api?id=T2pdmZhDXfo&format=1](https://maple3142-ytdl-demo.glitch.me/api?id=T2pdmZhDXfo&format=1)
 
 > You can append `format=1` to get a human readable JSON.
 
 ## Graphql
 
-Graphiql: [https://maple3142-ytdl.glitch.me/graphql](https://maple3142-ytdl.glitch.me/graphql)
+Graphiql: [https://maple3142-ytdl-demo.glitch.me/graphql](https://maple3142-ytdl-demo.glitch.me/graphql)
 
-### [Example](https://maple3142-ytdl.glitch.me/graphql?query=query%20(%24id%3A%20String!)%20%7B%0A%20%20search(id%3A%20%24id)%20%7B%0A%20%20%20%20meta%20%7B%0A%20%20%20%20%20%20title%0A%20%20%20%20%20%20thumbnail_url%0A%20%20%20%20%20%20author%0A%20%20%20%20%20%20view_count%0A%20%20%20%20%7D%0A%20%20%20%20stream%20%7B%0A%20%20%20%20%20%20quality%0A%20%20%20%20%20%20type%0A%20%20%20%20%20%20url%0A%20%20%20%20%20%20itag%0A%20%20%20%20%7D%0A%20%20%7D%0A%7D%0A&variables=%7B%0A%20%20%22id%22%3A%20%22XogSflwXgpw%22%0A%7D%0A)
+### [Example](https://maple3142-ytdl-demo.glitch.me/graphql?query=query%20(%24id%3A%20String!)%20%7B%0A%20%20search(id%3A%20%24id)%20%7B%0A%20%20%20%20meta%20%7B%0A%20%20%20%20%20%20title%0A%20%20%20%20%20%20thumbnail_url%0A%20%20%20%20%20%20author%0A%20%20%20%20%20%20view_count%0A%20%20%20%20%7D%0A%20%20%20%20stream%20%7B%0A%20%20%20%20%20%20quality%0A%20%20%20%20%20%20type%0A%20%20%20%20%20%20url%0A%20%20%20%20%20%20itag%0A%20%20%20%20%7D%0A%20%20%7D%0A%7D%0A&variables=%7B%0A%20%20%22id%22%3A%20%22XogSflwXgpw%22%0A%7D%0A)
 
 Query:
 

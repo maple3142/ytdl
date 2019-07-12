@@ -2,8 +2,7 @@ const Koa = require('koa')
 const koaBody = require('koa-body')
 const mount = require('koa-mount')
 const graphqlHTTP = require('koa-graphql')
-const ratelimit = require('koa-ratelimit')
-const Redis = require('ioredis')
+const { RateLimiterMemory } = require('rate-limiter-flexible')
 const app = new Koa()
 const getVideo = require('./getvid')
 const gql = require('./gql')
@@ -11,21 +10,19 @@ const gql = require('./gql')
 app.use(koaBody())
 
 // Ratelimit, prevent someone from abusing the demo site
-app.use(
-	ratelimit({
-		db: new Redis(),
-		duration: 3600000,
-		errorMessage: 'Too much requests.',
-		id: ctx => ctx.request.headers['x-forwarded-for'].split(',')[0], // get real ipv4 on glitch.com
-		headers: {
-			remaining: 'Rate-Limit-Remaining',
-			reset: 'Rate-Limit-Reset',
-			total: 'Rate-Limit-Total'
-		},
-		max: 60,
-		disableHeader: false
-	})
-)
+const limiter = new RateLimiterMemory({
+	points: 100,
+	duration: 3600
+})
+app.use(async (ctx, next) => {
+	try {
+		await limiter.consume(ctx.request.headers['x-forwarded-for'].split(',')[0])
+		next() // don't wait and catch
+	} catch (e) {
+		ctx.status = 429
+		ctx.body = 'Too Many Requests'
+	}
+})
 
 // cors
 app.use(async (ctx, next) => {

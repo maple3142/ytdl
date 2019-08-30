@@ -18,7 +18,7 @@
 		"xfetch-js": "^0.1.4"
 	},
 	"engines": {
-		"node": "10.1.0"
+		"node": ">=10.0.0"
 	},
 	"scripts": {
 		"start": "node index.js"

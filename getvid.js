@@ -2,7 +2,7 @@ const xf = require('xfetch-js')
 const getdecsig = require('./decsig')
 const qs = require('qs')
 
-const getVideo = async (id, decsig) => {
+const getVideo = async id => {
 	return xf
 		.get(`https://www.youtube.com/get_video_info?video_id=${id}&el=detailpage`)
 		.text()

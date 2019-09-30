@@ -6,7 +6,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - name: send update request
+    - name: send update request to glitch.com api
       env:
         AUTH: ${{ secrets.AUTH }}
       run: curl -X POST https://api.glitch.com/project/githubImport?authorization=${AUTH}&projectId=94311f9c-5427-4b1e-a860-fd7720f909f7&repo=maple3142%2Fytdl

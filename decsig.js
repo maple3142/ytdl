@@ -26,23 +26,30 @@ const fallback = a => {
 	return a.join('')
 }
 
-const parsedecsig = data => {
+const parseDecsig = data => {
 	if (data.startsWith('var script')) {
 		// they inject the script via script tag
 		const obj = {}
-		const document = { createElement: () => obj, head: { appendChild: () => {} } }
+		const document = {
+			createElement: () => obj,
+			head: { appendChild: () => {} }
+		}
 		eval(data)
 		data = obj.innerHTML
 	}
-	const fnnameresult = /\.set\([^,]*,encodeURIComponent\(([^(]*)\(/.exec(data)
-	const fnname = fnnameresult[1]
-	const _argnamefnbodyresult = new RegExp(fnname + '=function\\((.+?)\\){(.+?)}').exec(data)
-	const [_, argname, fnbody] = _argnamefnbodyresult
-	const helpernameresult = /;(.+?)\..+?\(/.exec(fnbody)
-	const helpername = helpernameresult[1]
-	const helperresult = new RegExp('var ' + helpername + '={[\\s\\S]+?};').exec(data)
-	const helper = helperresult[0]
-	return new Function([argname], helper + '\n' + fnbody)
+	const fnNameResult = /=([a-zA-Z0-9\$]+?)\(decodeURIComponent/.exec(data)
+	const fnName = fnNameResult[1]
+	const _argNameFnBodyResult = new RegExp(
+		fnName + '=function\\((.+?)\\){(.+?)}'
+	).exec(data)
+	const [_, argName, fnBody] = _argNameFnBodyResult
+	const helperNameResult = /;(.+?)\..+?\(/.exec(fnBody)
+	const helperName = helperNameResult[1]
+	const helperResult = new RegExp(
+		'var ' + helperName + '={[\\s\\S]+?};'
+	).exec(data)
+	const helper = helperResult[0]
+	return new Function([argName], helper + '\n' + fnBody)
 }
 module.exports = (id, safe = true) =>
 	xf
@@ -53,9 +60,11 @@ module.exports = (id, safe = true) =>
 			const window = {}
 			// This script will throw an error if no window is provided
 			runInContext(d[1] + ';window.ytplayer = ytplayer', { window })
-			return xf.get('https://youtube.com' + window.ytplayer.config.assets.js).text()
+			return xf
+				.get('https://youtube.com' + window.ytplayer.config.assets.js)
+				.text()
 		})
-		.then(data => parsedecsig(data))
+		.then(data => parseDecsig(data))
 		.then(fn => (safe ? createSafeFn(fn) : fn))
 		.catch(e => console.info('use fallback', e) || fallback)
 

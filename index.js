@@ -25,7 +25,12 @@ app.use(async (ctx, next) => {
 		ctx.body = 'Too Many Requests'
 		allowed = false
 	}
-	console.log('Request IP: %s, Allowed: %s, Url: %s', ctx.ip, allowed, ctx.url)
+	console.log(
+		'Request IP: %s, Allowed: %s, Url: %s',
+		ctx.ip,
+		allowed,
+		ctx.url
+	)
 })
 
 // cors

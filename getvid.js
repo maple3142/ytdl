@@ -4,7 +4,9 @@ const qs = require('qs')
 
 const getVideo = async id => {
 	return xf
-		.get(`https://www.youtube.com/get_video_info?video_id=${id}&el=detailpage`)
+		.get(
+			`https://www.youtube.com/get_video_info?video_id=${id}&el=detailpage`
+		)
 		.text()
 		.then(async data => {
 			const obj = qs.parse(data)
@@ -12,24 +14,30 @@ const getVideo = async id => {
 			if (obj.status === 'fail') {
 				throw obj
 			}
-			const decsig = await getdecsig(id)
+			const decsig = await getdecsig(id, false)
 			let stream = []
 			if (playerResponse.streamingData.formats) {
-				stream = playerResponse.streamingData.formats.map(x => Object.assign(x, qs.parse(x.cipher)))
+				stream = playerResponse.streamingData.formats.map(x =>
+					Object.assign(x, qs.parse(x.cipher))
+				)
 				if (stream[0].sp && stream[0].sp.includes('sig')) {
-					stream = stream
-						.map(x => ({ ...x, s: decsig(x.s) }))
-						.map(x => ({ ...x, url: x.url + `&sig=${x.s}` }))
+					for (const obj of stream) {
+						obj.s = decsig(obj.s)
+						obj.url += `&sig=${obj.s}`
+					}
 				}
 			}
 
 			let adaptive = []
 			if (playerResponse.streamingData.adaptiveFormats) {
-				adaptive = playerResponse.streamingData.adaptiveFormats.map(x => Object.assign(x, qs.parse(x.cipher)))
+				adaptive = playerResponse.streamingData.adaptiveFormats.map(x =>
+					Object.assign(x, qs.parse(x.cipher))
+				)
 				if (adaptive[0].sp && adaptive[0].sp.includes('sig')) {
-					adaptive = adaptive
-						.map(x => ({ ...x, s: decsig(x.s) }))
-						.map(x => ({ ...x, url: x.url + `&sig=${x.s}` }))
+					for (const obj of adaptive) {
+						obj.s = decsig(obj.s)
+						obj.url += `&sig=${obj.s}`
+					}
 				}
 			}
 			return { stream, adaptive, meta: obj }

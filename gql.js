@@ -2,7 +2,9 @@ const getVideo = require('./getvid')
 const { buildSchema } = require('graphql')
 const fs = require('fs')
 
-const schema = buildSchema(fs.readFileSync(__dirname + '/schema.gql').toString())
+const schema = buildSchema(
+	fs.readFileSync(__dirname + '/schema.gql').toString()
+)
 exports.schema = schema
 
 const root = {

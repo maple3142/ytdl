@@ -2,27 +2,28 @@ const xf = require('xfetch-js')
 const { createSafeFn, runInContext } = require('./sandboxutil')
 
 const fallback = a => {
-	// 20190712
-	var Hv = {
-		jk: function(a) {
-			a.reverse()
-		},
-		GE: function(a, b) {
-			a.splice(0, b)
-		},
-		pZ: function(a, b) {
+	// 20200425
+	var Av = {
+		nt: function (a, b) {
 			var c = a[0]
 			a[0] = a[b % a.length]
 			a[b % a.length] = c
+		},
+		xD: function (a) {
+			a.reverse()
+		},
+		J3: function (a, b) {
+			a.splice(0, b)
 		}
 	}
 	a = a.split('')
-	Hv.pZ(a, 70)
-	Hv.GE(a, 2)
-	Hv.pZ(a, 47)
-	Hv.GE(a, 2)
-	Hv.pZ(a, 31)
-	Hv.GE(a, 1)
+	Av.nt(a, 17)
+	Av.nt(a, 16)
+	Av.xD(a, 4)
+	Av.nt(a, 25)
+	Av.xD(a, 63)
+	Av.nt(a, 50)
+	Av.nt(a, 35)
 	return a.join('')
 }
 
@@ -59,7 +60,9 @@ module.exports = (id, safe = true) =>
 			const d = /<script >(var ytplayer[\s\S]*?)<\/script>/.exec(data)
 			const window = {}
 			// This script will throw an error if no window is provided
-			runInContext(d[1] + ';window.ytplayer = ytplayer', { window })
+			runInContext(d[1] + ';var yt = window.ytplayer = ytplayer', {
+				window
+			})
 			return xf
 				.get('https://youtube.com' + window.ytplayer.config.assets.js)
 				.text()
@@ -69,12 +72,7 @@ module.exports = (id, safe = true) =>
 		.catch(e => console.info('use fallback', e) || fallback)
 
 if (require.main === module) {
-	module.exports('-tKVN2mAKRI', false).then(fn =>
-		console.log(
-			fn
-				.toString()
-				.split('\n')
-				.join('')
-		)
-	)
+	module
+		.exports('-tKVN2mAKRI', false)
+		.then(fn => console.log(fn.toString().split('\n').join('')))
 }
